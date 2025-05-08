@@ -1,50 +1,117 @@
-# Welcome to your Expo app 👋
+# 🎧 AudioRemote
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Controle remoto de mídia via rede local, usando um aplicativo mobile feito com **Expo** e um servidor local em **Python Flask** que envia comandos de mídia ao computador (Windows).
 
-## Get started
+---
 
-1. Install dependencies
+## Funcionalidades
 
-   ```bash
-   npm install
-   ```
+- Play/Pause ⏯
+- Próxima música ⏭
+- Música anterior ⏮
+- Aumentar volume 🔊
+- Diminuir volume 🔉
+- Configuração do IP do servidor diretamente no app
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## Tecnologias Utilizadas
 
-In the output, you'll find options to open the app in a
+### App Mobile (Expo + React Native)
+- `expo-router` (para navegação entre telas)
+- `react-native` (interface e interação)
+- `fetch()` para comunicação HTTP
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Servidor (Python)
+- `Flask` (API HTTP)
+- `pynput` (simulação de teclas de mídia)
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+## 🚀 Como rodar o projeto
 
-When you're ready, run:
+### 🔧 Servidor Python
+
+1. Instale os pacotes:
 
 ```bash
-npm run reset-project
+pip install flask pynput
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Crie o arquivo `server.py`:
 
-## Learn more
+```python
+from flask import Flask, request
+from pynput.keyboard import Key, Controller
 
-To learn more about developing your project with Expo, look at the following resources:
+keyboard = Controller()
+app = Flask(__name__)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+@app.route('/command/<action>', methods=['POST'])
+def command(action):
+    keymap = {
+        "playpause": Key.media_play_pause,
+        "next": Key.media_next,
+        "prev": Key.media_previous,
+        "volup": Key.media_volume_up,
+        "voldown": Key.media_volume_down,
+    }
+    if action in keymap:
+        keyboard.press(keymap[action])
+        keyboard.release(keymap[action])
+        return f"{action} enviado", 200
+    return "Comando inválido", 400
 
-## Join the community
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+```
 
-Join our community of developers creating universal apps.
+3. Execute o servidor:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+python server.py
+```
+
+⚠️ **Permita o acesso no firewall do Windows** para conexões de entrada no Python.
+
+---
+
+### 📲 App Expo (Mobile)
+
+1. Instale as dependências:
+
+```bash
+npm install
+npx expo install expo-router
+```
+
+2. Estrutura esperada:
+
+```
+/app
+  /config.jsx      ← tela de configuração do IP
+  /index.jsx       ← tela de controle
+/app/_layout.tsx   ← layout do expo-router
+```
+
+3. Inicie o app:
+
+```bash
+npx expo start
+```
+
+4. Escaneie o QR code com o celular conectado na **mesma rede local (Wi-Fi)** do PC.
+
+---
+
+## 📡 Observações
+
+- O celular e o PC devem estar na mesma rede local.
+- O servidor funciona offline, ideal para viagens usando hotspot.
+- Testado no **Windows 10**, **Android**, e **Expo Go**.
+
+---
+
+## 📘 Licença
+
+Projeto acadêmico individual — Universidade Federal de Itajubá (UNIFEI).
