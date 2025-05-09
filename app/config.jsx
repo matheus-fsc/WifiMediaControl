@@ -1,6 +1,29 @@
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useRouter } from 'expo-router';
+
+// Função para escanear dispositivos na rede local
+export const scanNetworkDevices = async (ports = [5000]) => {
+  const devices = [];
+
+  if (Platform.OS === 'web') {
+    console.warn('Detecção de rede não é suportada na web. Configure o IP manualmente.');
+    return devices;
+  }
+
+  try {
+    const NetworkInfo = require('react-native-network-info');
+    const localIP = await NetworkInfo.getIPAddress();
+    const subnetMask = await NetworkInfo.getSubnet();
+    console.log('Local IP:', localIP);
+    console.log('Subnet Mask:', subnetMask);
+  } catch (error) {
+    console.error('Erro ao obter informações de rede:', error);
+  }
+
+  return devices;
+};
 
 export default function ConfigScreen() {
   const [ip, setIp] = useState('');
@@ -11,14 +34,12 @@ export default function ConfigScreen() {
       Alert.alert('Erro', 'Por favor, insira um IP válido.');
       return;
     }
-    router.replace({ pathname: '/', params: { ip: ip.trim() } }); 
+    router.replace({ pathname: '/', params: { ip: ip.trim() } });
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => router.push('/')}
+      <TouchableOpacity style={styles.backButton} onPress={() => router.push('/')}
       >
         <Text style={styles.backButtonText}>← Voltar</Text>
       </TouchableOpacity>
@@ -80,5 +101,5 @@ const styles = StyleSheet.create({
   backButtonText: {
     color: '#fff',
     fontSize: 14,
-  },
+  }
 });
