@@ -26,9 +26,9 @@ class AudioRemoteServer:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("AudioRemote Server v2.0")
-        self.root.geometry("600x700")
+        self.root.geometry("600x850")
         self.root.resizable(True, True)
-        self.root.minsize(600, 650)
+        self.root.minsize(600, 750)
         
         # Define ícone da janela
         try:
@@ -85,100 +85,97 @@ class AudioRemoteServer:
     
     def setup_ui(self):
         """Configura a interface gráfica"""
-        # Header com título
-        header_frame = tk.Frame(self.root, bg="#1DB954", height=95)
+        # Header com título e gradiente visual
+        header_frame = tk.Frame(self.root, bg="#1DB954", height=100)
         header_frame.pack(fill=tk.X)
         header_frame.pack_propagate(False)
         
         # Título e versão centralizados
         title_container = tk.Frame(header_frame, bg="#1DB954")
-        title_container.pack(expand=True, pady=15)
+        title_container.pack(expand=True, pady=18)
         
         title_label = tk.Label(title_container, text="AudioRemote Server", 
-                               font=("Segoe UI", 20, "bold"), bg="#1DB954", fg="white")
+                               font=("Segoe UI", 22, "bold"), bg="#1DB954", fg="white")
         title_label.pack()
         
         version_label = tk.Label(title_container, text="Version 2.0.0", 
-                                font=("Segoe UI", 10), bg="#1DB954", fg="#d0f0c0")
-        version_label.pack()
+                                font=("Segoe UI", 10), bg="#1DB954", fg="#b8e6c9")
+        version_label.pack(pady=(2, 0))
         
-        # Container principal
-        main_frame = tk.Frame(self.root, bg="#f5f5f5", padx=25, pady=20)
+        # Container principal com fundo elegante
+        main_frame = tk.Frame(self.root, bg="#f8f9fa", padx=30, pady=25)
         main_frame.pack(fill=tk.BOTH, expand=True)
         
-        # IP do Servidor
-        ip_section = tk.Frame(main_frame, bg="#ffffff", relief=tk.RIDGE, bd=1)
-        ip_section.pack(fill=tk.X, pady=(0, 12))
+        # IP do Servidor com borda sutil
+        ip_section = tk.Frame(main_frame, bg="#ffffff", relief=tk.SOLID, bd=1, highlightbackground="#e0e0e0", highlightthickness=1)
+        ip_section.pack(fill=tk.X, pady=(0, 15))
         
         ip_title = tk.Label(ip_section, text="SERVER ADDRESS", 
-                           font=("Segoe UI", 9, "bold"), bg="#ffffff", fg="#666666")
-        ip_title.pack(anchor="w", padx=15, pady=(12, 5))
+                           font=("Segoe UI", 9, "bold"), bg="#ffffff", fg="#5a5a5a")
+        ip_title.pack(anchor="w", padx=18, pady=(15, 8))
         
         ip_value_frame = tk.Frame(ip_section, bg="#ffffff")
-        ip_value_frame.pack(fill=tk.X, padx=15, pady=(0, 8))
+        ip_value_frame.pack(fill=tk.X, padx=18, pady=(0, 10))
         
-        self.ip_entry = tk.Entry(ip_value_frame, font=("Consolas", 12, "bold"), 
-                                fg="#1DB954", relief=tk.FLAT, bg="#f9f9f9", 
-                                state="readonly", readonlybackground="#f9f9f9")
-        self.ip_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, ipady=5, ipadx=8)
-        self.ip_entry.insert(0, f"{self.local_ip}:5000")
+        self.ip_label = tk.Label(ip_value_frame, text=f"{self.local_ip}:5000",
+                                font=("Consolas", 14, "bold"), fg="#1DB954", bg="#ffffff",
+                                anchor="w")
+        self.ip_label.pack(side=tk.LEFT, fill=tk.X, expand=True)
         
-        ip_copy_btn = tk.Button(ip_value_frame, text="Copy", font=("Segoe UI", 9),
+        ip_copy_btn = tk.Button(ip_value_frame, text="Copy", font=("Segoe UI", 9, "bold"),
                                bg="#1DB954", fg="white", relief=tk.FLAT, cursor="hand2",
-                               padx=15, pady=5,
+                               padx=18, pady=6, activebackground="#17a34a",
                                command=lambda: self.copy_to_clipboard(f"{self.local_ip}:5000"))
-        ip_copy_btn.pack(side=tk.RIGHT, padx=(10, 0))
-        
-        url_label = tk.Label(ip_section, text=f"http://{self.local_ip}:5000", 
-                            font=("Segoe UI", 8), bg="#ffffff", fg="#999999")
-        url_label.pack(anchor="w", padx=15, pady=(0, 12))
+        ip_copy_btn.pack(side=tk.RIGHT, padx=(12, 0))
         
         # Token de Autenticação
-        token_section = tk.Frame(main_frame, bg="#ffffff", relief=tk.RIDGE, bd=1)
-        token_section.pack(fill=tk.X, pady=(0, 12))
+        token_section = tk.Frame(main_frame, bg="#ffffff", relief=tk.SOLID, bd=1, highlightbackground="#e0e0e0", highlightthickness=1)
+        token_section.pack(fill=tk.X, pady=(0, 15))
         
         token_title = tk.Label(token_section, text="AUTHENTICATION TOKEN", 
-                              font=("Segoe UI", 9, "bold"), bg="#ffffff", fg="#666666")
-        token_title.pack(anchor="w", padx=15, pady=(12, 5))
+                              font=("Segoe UI", 9, "bold"), bg="#ffffff", fg="#5a5a5a")
+        token_title.pack(anchor="w", padx=18, pady=(15, 8))
         
         token_value_frame = tk.Frame(token_section, bg="#ffffff")
-        token_value_frame.pack(fill=tk.X, padx=15, pady=(0, 8))
+        token_value_frame.pack(fill=tk.X, padx=18, pady=(0, 10))
         
         self.token_entry = tk.Entry(token_value_frame, font=("Consolas", 10), 
-                                    fg="#333333", relief=tk.FLAT, bg="#f9f9f9")
-        self.token_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, ipady=5, ipadx=8)
+                                    fg="#333333", relief=tk.SOLID, bg="#f7f7f7", bd=1)
+        self.token_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, ipady=6, ipadx=10)
         self.token_entry.insert(0, self.token)
         
-        token_copy_btn = tk.Button(token_value_frame, text="Copy", font=("Segoe UI", 9),
+        token_copy_btn = tk.Button(token_value_frame, text="Copy", font=("Segoe UI", 9, "bold"),
                                   bg="#1DB954", fg="white", relief=tk.FLAT, cursor="hand2",
-                                  padx=15, pady=5,
+                                  padx=18, pady=6, activebackground="#17a34a",
                                   command=lambda: self.copy_to_clipboard(self.token_entry.get()))
-        token_copy_btn.pack(side=tk.RIGHT, padx=(10, 0))
+        token_copy_btn.pack(side=tk.RIGHT, padx=(12, 0))
         
         # Botões de token
         token_btn_frame = tk.Frame(token_section, bg="#ffffff")
-        token_btn_frame.pack(fill=tk.X, padx=15, pady=(0, 12))
+        token_btn_frame.pack(fill=tk.X, padx=18, pady=(0, 15))
         
-        generate_btn = tk.Button(token_btn_frame, text="Generate New", font=("Segoe UI", 9),
-                                bg="#4CAF50", fg="white", relief=tk.FLAT, cursor="hand2",
-                                padx=12, pady=5, command=self.generate_new_token)
-        generate_btn.pack(side=tk.LEFT, padx=(0, 8))
+        generate_btn = tk.Button(token_btn_frame, text="Generate New", font=("Segoe UI", 9, "bold"),
+                                bg="#10b981", fg="white", relief=tk.FLAT, cursor="hand2",
+                                padx=16, pady=7, activebackground="#059669",
+                                command=self.generate_new_token)
+        generate_btn.pack(side=tk.LEFT, padx=(0, 10))
         
-        save_btn = tk.Button(token_btn_frame, text="Save Custom", font=("Segoe UI", 9),
-                            bg="#2196F3", fg="white", relief=tk.FLAT, cursor="hand2",
-                            padx=12, pady=5, command=self.save_custom_token)
+        save_btn = tk.Button(token_btn_frame, text="Save Custom", font=("Segoe UI", 9, "bold"),
+                            bg="#3b82f6", fg="white", relief=tk.FLAT, cursor="hand2",
+                            padx=16, pady=7, activebackground="#2563eb",
+                            command=self.save_custom_token)
         save_btn.pack(side=tk.LEFT)
         
         # Status e Controles
-        control_section = tk.Frame(main_frame, bg="#ffffff", relief=tk.RIDGE, bd=1)
-        control_section.pack(fill=tk.X, pady=(0, 12))
+        control_section = tk.Frame(main_frame, bg="#ffffff", relief=tk.SOLID, bd=1, highlightbackground="#e0e0e0", highlightthickness=1)
+        control_section.pack(fill=tk.X, pady=(0, 15))
         
         status_title = tk.Label(control_section, text="SERVER STATUS", 
-                               font=("Segoe UI", 9, "bold"), bg="#ffffff", fg="#666666")
-        status_title.pack(anchor="w", padx=15, pady=(12, 5))
+                               font=("Segoe UI", 9, "bold"), bg="#ffffff", fg="#5a5a5a")
+        status_title.pack(anchor="w", padx=18, pady=(15, 8))
         
         status_indicator_frame = tk.Frame(control_section, bg="#ffffff")
-        status_indicator_frame.pack(fill=tk.X, padx=15, pady=(0, 12))
+        status_indicator_frame.pack(fill=tk.X, padx=18, pady=(0, 15))
         
         self.status_dot = tk.Canvas(status_indicator_frame, width=12, height=12, 
                                    bg="#ffffff", highlightthickness=0)
@@ -191,29 +188,31 @@ class AudioRemoteServer:
         
         # Botões de controle
         btn_frame = tk.Frame(control_section, bg="#ffffff")
-        btn_frame.pack(fill=tk.X, padx=15, pady=(0, 12))
+        btn_frame.pack(fill=tk.X, padx=18, pady=(0, 15))
         
         self.start_btn = tk.Button(btn_frame, text="START SERVER", 
                                    font=("Segoe UI", 11, "bold"), bg="#1DB954", fg="white",
                                    relief=tk.FLAT, cursor="hand2", height=2,
+                                   activebackground="#17a34a",
                                    command=self.start_server)
-        self.start_btn.pack(fill=tk.X, pady=(0, 8))
+        self.start_btn.pack(fill=tk.X, pady=(0, 10))
         
         self.stop_btn = tk.Button(btn_frame, text="STOP SERVER", 
-                                  font=("Segoe UI", 11, "bold"), bg="#dc3545", fg="white",
+                                  font=("Segoe UI", 11, "bold"), bg="#ef4444", fg="white",
                                   relief=tk.FLAT, cursor="hand2", height=2, state=tk.DISABLED,
+                                  activebackground="#dc2626",
                                   command=self.stop_server)
         self.stop_btn.pack(fill=tk.X)
         
         # Log de Atividades
-        log_section = tk.Frame(main_frame, bg="#ffffff", relief=tk.RIDGE, bd=1)
+        log_section = tk.Frame(main_frame, bg="#ffffff", relief=tk.SOLID, bd=1, highlightbackground="#e0e0e0", highlightthickness=1)
         log_section.pack(fill=tk.BOTH, expand=True)
         
         log_header = tk.Frame(log_section, bg="#ffffff")
-        log_header.pack(fill=tk.X, padx=15, pady=(12, 5))
+        log_header.pack(fill=tk.X, padx=18, pady=(15, 8))
         
         log_title = tk.Label(log_header, text="ACTIVITY LOG", 
-                            font=("Segoe UI", 9, "bold"), bg="#ffffff", fg="#666666")
+                            font=("Segoe UI", 9, "bold"), bg="#ffffff", fg="#5a5a5a")
         log_title.pack(side=tk.LEFT)
         
         log_toggle = tk.Checkbutton(log_header, text="Show Logs", variable=self.show_logs,
@@ -223,16 +222,19 @@ class AudioRemoteServer:
         log_toggle.pack(side=tk.RIGHT)
         
         self.log_container = tk.Frame(log_section, bg="#ffffff")
-        self.log_container.pack(fill=tk.BOTH, expand=True, padx=15, pady=(0, 12))
+        self.log_container.pack(fill=tk.BOTH, expand=True, padx=18, pady=(0, 15))
         
-        self.log_text = tk.Text(self.log_container, height=6, font=("Consolas", 9), 
-                               state=tk.DISABLED, bg="#fafafa", relief=tk.FLAT,
-                               fg="#333333", wrap=tk.WORD)
+        # Scrollbar vertical para logs
+        log_scroll = tk.Scrollbar(self.log_container, orient=tk.VERTICAL)
+        log_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        self.log_text = tk.Text(self.log_container, height=8, font=("Consolas", 9), 
+                               state=tk.DISABLED, bg="#f7f7f7", relief=tk.SOLID, bd=1,
+                               fg="#333333", wrap=tk.WORD,
+                               yscrollcommand=log_scroll.set)
         self.log_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         
-        log_scroll = tk.Scrollbar(self.log_container, command=self.log_text.yview)
-        log_scroll.pack(side=tk.RIGHT, fill=tk.Y)
-        self.log_text.config(yscrollcommand=log_scroll.set)
+        log_scroll.config(command=self.log_text.yview)
         
         self.log("Server ready to start")
     
@@ -341,7 +343,7 @@ class AudioRemoteServer:
     def toggle_logs(self):
         """Mostra ou oculta a área de logs"""
         if self.show_logs.get():
-            self.log_container.pack(fill=tk.BOTH, expand=True, padx=15, pady=(0, 12))
+            self.log_container.pack(fill=tk.BOTH, expand=True, padx=18, pady=(0, 15))
         else:
             self.log_container.pack_forget()
     

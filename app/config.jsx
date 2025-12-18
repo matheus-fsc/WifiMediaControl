@@ -98,21 +98,84 @@ export default function ConfigScreen() {
     }
   };
 
-  const autoScanNetwork = async () => {
+  const autoScanNetwork = () => {
+    showNetworkTypeSelector();
+  };
+
+  const getNetworkPatterns = (networkType) => {
+    const patterns = {
+      auto: [
+        { base: '192.168.1', range: [1, 50] },    // Mais comum
+        { base: '192.168.0', range: [1, 50] },    // Segundo mais comum
+        { base: '192.168.18', range: [1, 50] },   // Padrão do servidor atual
+        { base: '192.168.43', range: [1, 30] },   // Android hotspot
+        { base: '192.168.49', range: [1, 30] },   // Android hotspot alternativo
+        { base: '172.20.10', range: [1, 30] },    // iOS hotspot
+        { base: '10.0.0', range: [1, 30] },       // Redes corporativas
+      ],
+      wifi: [
+        { base: '192.168.1', range: [1, 100] },
+        { base: '192.168.0', range: [1, 100] },
+        { base: '192.168.18', range: [1, 100] },
+        { base: '10.0.0', range: [1, 50] },
+      ],
+      android: [
+        { base: '192.168.43', range: [1, 50] },
+        { base: '192.168.49', range: [1, 50] },
+        { base: '192.168.1', range: [1, 30] },
+      ],
+      ios: [
+        { base: '172.20.10', range: [1, 50] },
+        { base: '192.168.1', range: [1, 30] },
+      ],
+    };
+    return patterns[networkType] || patterns.auto;
+  };
+
+  const showNetworkTypeSelector = () => {
+    const options = [
+      'Automático (Todas as redes)',
+      'Wi-Fi Comum (192.168.x.x)',
+      'Hotspot Android (192.168.43.x)',
+      'Hotspot iOS (172.20.10.x)',
+      t('alerts.cancel')
+    ];
+
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          title: 'Selecione o tipo de rede',
+          options,
+          cancelButtonIndex: 4,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 0) performScan('auto');
+          else if (buttonIndex === 1) performScan('wifi');
+          else if (buttonIndex === 2) performScan('android');
+          else if (buttonIndex === 3) performScan('ios');
+        }
+      );
+    } else {
+      Alert.alert(
+        'Selecione o tipo de rede',
+        'Escolha a rede onde o servidor está conectado:',
+        [
+          { text: 'Automático', onPress: () => performScan('auto') },
+          { text: 'Wi-Fi Comum', onPress: () => performScan('wifi') },
+          { text: 'Hotspot Android', onPress: () => performScan('android') },
+          { text: 'Hotspot iOS', onPress: () => performScan('ios') },
+          { text: t('alerts.cancel'), style: 'cancel' }
+        ]
+      );
+    }
+  };
+
+  const performScan = async (networkType) => {
     setScanning(true);
     setFoundDevices([]);
     setScanProgress('Iniciando scan...');
     
-    // Padrões comuns de rede (ordem por probabilidade)
-    const networkPatterns = [
-      { base: '192.168.1', range: [1, 50] },    // Mais comum
-      { base: '192.168.0', range: [1, 50] },    // Segundo mais comum
-      { base: '192.168.18', range: [1, 50] },   // Padrão do servidor atual
-      { base: '192.168.43', range: [1, 30] },   // Android hotspot
-      { base: '192.168.49', range: [1, 30] },   // Android hotspot alternativo
-      { base: '172.20.10', range: [1, 30] },    // iOS hotspot
-      { base: '10.0.0', range: [1, 30] },       // Redes corporativas
-    ];
+    const networkPatterns = getNetworkPatterns(networkType);
 
     const found = [];
     let totalChecked = 0;
