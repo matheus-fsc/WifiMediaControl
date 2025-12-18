@@ -5,3 +5,32 @@ node_modules
 
 expo-env.d.ts
 # @end expo-cli
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+server/dist/
+server/build/
+*.spec
+
+# Server files
+server/server_token.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
