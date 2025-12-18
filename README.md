@@ -242,7 +242,7 @@ Control Panel → Firewall → Allow an app
 
 - Both mobile device and server must be on the same local network
 - The server works offline, ideal for travel using mobile hotspot
-- Tested on Windows 10, Android, and iOS with Expo Go
+- Tested on Windows 11, Android, and iOS with Expo Go
 
 ---
 
