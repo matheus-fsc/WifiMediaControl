@@ -86,7 +86,7 @@ class AudioRemoteServer:
     def setup_ui(self):
         """Configura a interface gráfica"""
         # Header com título
-        header_frame = tk.Frame(self.root, bg="#1DB954", height=80)
+        header_frame = tk.Frame(self.root, bg="#1DB954", height=95)
         header_frame.pack(fill=tk.X)
         header_frame.pack_propagate(False)
         
