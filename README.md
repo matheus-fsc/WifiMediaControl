@@ -20,7 +20,7 @@ This project was developed to solve a real-world constraint: controlling a PC's 
 - **Play/Pause Control** - Media playback control
 - **Next/Previous Track** - Navigation between tracks
 - **Volume Control** - Interactive slider for precise volume adjustment
-- **Auto-Discovery System** - UDP network scanner automatically identifies server IP
+- **Auto-Discovery System** - Network scanner automatically identifies server IP
 - **Network Type Selection** - Optimized scanning for Wi-Fi, Android Hotspot, or iOS Hotspot
 - **Token-Based Authentication** - Bearer token security for authorized access
 - **Multi-Language Support** - English/Portuguese-BR with auto-detection
@@ -29,13 +29,12 @@ This project was developed to solve a real-world constraint: controlling a PC's 
 
 ### Desktop Server
 - **Modern GUI Interface** - Professional tkinter interface
-- **Automatic End-User (Windows Executable - Recommended)
-
-1. Download the latest `AudioRemote-Server.exe` from the [Releases page](https://github.com/matheus-fsc/WifiMediaControl/releases)
-2. Run the executable on your Windows computer
-3. Click **"Start Server"**
-4. Open the mobile app and use the **Auto-Scan** feature to connect automatically
-5. Enter the token displayed in the server GUIaller
+- **Automatic IP Detection** - Displays local IP automatically
+- **Token Management** - Generate, copy, and customize authentication tokens
+- **Real-Time Activity Monitor** - Live log of all client interactions
+- **Start/Stop Server** - One-click server control
+- **Toggleable Logs** - Show/hide activity log as needed
+- **Zero-Config Deployment** - Standalone `.exe` via PyInstaller
 
 ### Technical Highlights
 - **Offline-First Architecture** - Works perfectly on local hotspots without internet
@@ -48,16 +47,17 @@ This project was developed to solve a real-world constraint: controlling a PC's 
 
 ## Quick Start
 
-### Option 1: Windows Executable (Recommended)
+### Option 1: End-User (Windows Executable - Recommended)
 
-1. Download the executable from the [Releases page](https://github.com/seu-usuario/WifiMediaControl/releases)
-2. Run `AudioRemote-Server.exe`
-3. Click "Start Server"
-4. Configure the mobile app with the displayed IP and token
-Developer (Run from Source)
+1. Download the latest `AudioRemote-Server.exe` from the [Releases page](https://github.com/matheus-fsc/WifiMediaControl/releases)
+2. Run the executable on your Windows computer
+3. Click **"Start Server"**
+4. Open the mobile app and use the **Auto-Scan** feature to connect automatically
+5. Enter the token displayed in the server GUI
+
+### Option 2: Developer (Run from Source)
 
 #### Backend (Python Server)
-#### Python Server
 
 ```bash
 # Clone repository
@@ -80,14 +80,6 @@ python server/server.py
 
 #### Frontend (React Native Mobile App)
 
-1. Install Node.js and npm (if not already installed)
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Start the development server:
 ```bash
 # Install dependencies
 npm install
@@ -104,33 +96,12 @@ Scan the QR code with **Expo Go** app (iOS/Android) or native camera.
 3. Select network type (Auto, Wi-Fi, Android Hotspot, or iOS Hotspot)
 4. Enter the token displayed in the server GUI
 5. Tap **"Save"**
-cd server
-.\build.ps1
-```
-
-The executable will be created at: `server/dist/AudioRemote-Server.exe`
-
-For complete build documentation, see [server/BUILD.md](server/BUILD.md)
-
----
-Technology Stack & Architecture framework (Python built-in)
-- **Pillow 12.0.0** - Image processing
-- **PyInstaller 6.11.1** - Executable compilation
 
 ---
 
-## Project Structure
+## Technology Stack & Architecture
 
-```
-WifiMediaControl/
-├── app/                          # Expo mobile application
-│   ├── _contexts/                # React context providers
-│   │   └── LocalizationContext.tsx
-│   ├── _services/                # API service layer
-│   │   └── api.ts
-│   ├── locales/                  # i18n translations
-│   │   ├── en.ts
-│   │   ├──Application (Frontend)
+### Mobile Application (Frontend)
 - **Framework:** React Native / Expo SDK 54.0.0
 - **Routing:** Expo Router 6.0.21 (File-based routing)
 - **Language:** TypeScript (Type-safe API layer)
@@ -150,7 +121,36 @@ WifiMediaControl/
 ### DevOps & Automation
 - **CI/CD:** GitHub Actions (Automated builds on tag push)
 - **Version Control:** Git + GitHub
-- **Build System:** PowerShell scripts + PyInstallertation
+- **Build System:** PowerShell scripts + PyInstaller
+
+---
+
+## Project Structure
+
+```
+WifiMediaControl/
+├── app/                          # Expo mobile application
+│   ├── _contexts/                # React context providers
+│   │   └── LocalizationContext.tsx
+│   ├── _services/                # API service layer
+│   │   └── api.ts
+│   ├── locales/                  # i18n translations
+│   │   ├── en.ts
+│   │   ├── pt-BR.ts
+│   │   └── index.ts
+│   ├── _layout.tsx               # Root layout
+│   ├── index.jsx                 # Main screen (media controls)
+│   └── config.jsx                # Settings screen
+├── assets/                       # Static resources
+│   └── images/
+│       └── remoteControlIco.png
+├── server/                       # Python server
+│   ├── server.py                 # Flask server (console)
+│   ├── server_gui.py             # Flask server with GUI
+│   ├── requirements.txt          # Python dependencies
+│   ├── requirements-build.txt    # Build dependencies
+│   ├── build.ps1                 # Build script
+│   ├── BUILD.md                  # Build documentation
 │   └── assets/
 │       └── icon.png              # Server application icon
 ├── .github/workflows/            # CI/CD pipelines
@@ -161,30 +161,7 @@ WifiMediaControl/
 
 ---
 
-## Security
-
-- **Token Authentication** - All API requests require Bearer token authorization
-- **Persistent Token** - Saved in `server_token.txt` for consistency
-- **Customizable Token** - Configure your own token via GUI
-- **Local Network Only** - Server binds to LAN interface (0.0.0.0:5000)
-
----
-
-## Internationalization
-
-Supported languages:
-- English (US)
-- Portuguese (Brazil)
-
-The application automatically detects the system language with manual override capability.
-
-For detailed internationalization documentation, see [I18N_GUIDE.md](I18N_GUIDE.md)
-
----
-
-## Releases and Deployment
-
-### Creatin & Network
+## Security & Network
 
 The application operates **exclusively on the local network (LAN)**.
 
@@ -222,13 +199,11 @@ git push origin v2.0.0
 The workflow will:
 1. Compile the Windows executable
 2. Create a GitHub release
-3. Attach `AudioRemote-Server.exe` as anoRemote-Server.exe
-```
+3. Attach `AudioRemote-Server.exe` as an artifact
 
-### Network Scanner Cannot Find Server
+---
 
-- Verify both devices are on the same Wi-Fi network
-- EInternationalization
+## Internationalization
 
 Supported languages:
 - **English (US)**
@@ -240,11 +215,19 @@ For detailed internationalization documentation, see [I18N_GUIDE.md](I18N_GUIDE.
 
 ---
 
-## Support
+## Troubleshooting
 
-Found a bug? [Open an issue](https://github.com/seu-usuario/WifiMediaControl/issues)
+### Windows Firewall
 
---- or hotspot
+If the mobile app cannot connect, add a firewall exception:
+```
+Control Panel → Firewall → Allow an app
+→ Add Python or AudioRemote-Server.exe
+```
+
+### Network Scanner Cannot Find Server
+
+- Verify both devices are on the same Wi-Fi network or hotspot
 - Ensure the server is running (green status indicator)
 - Temporarily disable VPNs
 - Select the correct network type (Wi-Fi, Android Hotspot, iOS Hotspot)
@@ -287,3 +270,5 @@ Academic project developed at **Federal University of Itajubá (UNIFEI)**, combi
 - Network Programming
 - Mobile Development
 - Low-Level OS Integration
+
+**Built with Expo and Python**
